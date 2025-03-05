@@ -1,0 +1,55 @@
+const categories = {
+  attribute: {
+    körperlich: ["körperkraft", "geschick", "widerstand"],
+    sozial: ["charisma", "manipulation", "erscheinung"],
+    geistig: ["wahrnehmung", "intelligenz", "geistesschärfe"],
+  },
+  fähigkeiten: {
+    talente: [
+      "alertness",
+      "athletics",
+      "brawl",
+      "dodge",
+      "empathy",
+      "expression",
+      "intimidation",
+      "leadership",
+      "streetwise",
+      "subterfuge",
+    ],
+    fähigkeiten: [
+      "animal ken",
+      "crafts",
+      "etiquette",
+      "firearms",
+      "melee",
+      "performance",
+      "ride",
+      "security",
+      "stealth",
+      "survival",
+    ],
+    kenntnisse: [
+      "academics",
+      "enigma",
+      "finance",
+      "investigation",
+      "law",
+      "linguistics",
+      "medicine",
+      "occult",
+      "politics",
+      "science",
+    ],
+  },
+  vorteile: {
+    hintergründe: [],
+    disziplinenClan: ["auspex", "celerity", "presence"],
+    disziplinenNonClan: [],
+    tugenden: ["gewissen", "selbstbeherrschung", "mut"],
+  },
+  menschlichkeit: [],
+  willenskraft: [],
+};
+
+export default categories;
