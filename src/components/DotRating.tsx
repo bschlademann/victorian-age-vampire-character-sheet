@@ -3,29 +3,67 @@ import { useState } from "react";
 type DotValues = 1 | 2 | 3 | 4 | 5;
 
 export type DotRatingProps = {
-  type:
+  category:
     | "attribute"
-    | "skill"
-    | "disciplineClan"
-    | "disciplineNonClan"
-    | "virtue";
+    // | "fähigkeiten"
+    | "talente"
+    | "fertigkeiten"
+    | "kenntnisse"
+    | "disziplinenClan"
+    | "disziplinNonClan"
+    | "hintergründe"
+    | "tugenden";
+
   increaseXp: (value: number) => void;
   decreaseXp: (value: number) => void;
-  preChecked?: DotValues;
 };
 
-const DotRating = ({ type, increaseXp, decreaseXp }: DotRatingProps) => {
+const DotRating = ({ category, increaseXp, decreaseXp }: DotRatingProps) => {
   const dotValues: DotValues[] = [1, 2, 3, 4, 5];
   const pointsCost: Record<
-    DotRatingProps["type"],
+    DotRatingProps["category"],
     { [key in DotValues]: number }
   > = {
-    attribute: { 1: 0, 2: 8, 3: 12, 4: 16, 5: 20 },
-    skill: { 1: 3, 2: 4, 3: 6, 4: 8, 5: 10 },
-    disciplineClan: { 1: 10, 2: 10, 3: 15, 4: 20, 5: 25 },
-    disciplineNonClan: { 1: 10, 2: 14, 3: 21, 4: 28, 5: 35 },
-    virtue: { 1: 2, 2: 4, 3: 6, 4: 8, 5: 10 },
+    attribute: { 1: 0, 2: 4, 3: 8, 4: 12, 5: 16 },
+    talente: { 1: 3, 2: 2, 3: 4, 4: 6, 5: 8 },
+    fertigkeiten: { 1: 3, 2: 2, 3: 4, 4: 6, 5: 8 },
+    kenntnisse: { 1: 3, 2: 2, 3: 4, 4: 6, 5: 8 },
+    disziplinenClan: { 1: 10, 2: 5, 3: 15, 4: 15, 5: 20 },
+    disziplinNonClan: { 1: 10, 2: 7, 3: 14, 4: 21, 5: 28 },
+    hintergründe: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    tugenden: { 1: 0, 2: 2, 3: 4, 4: 6, 5: 8 },
   };
+
+  // | "menschlichkeit"
+  // | "willenskraft";
+
+  // type DotValuesHumanity = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+  // const humanity = {
+  //   menschlichkeit: {
+  //     1: 0,
+  //     2: 2,
+  //     3: 4,
+  //     4: 6,
+  //     5: 8,
+  //     6: 10,
+  //     7: 12,
+  //     8: 14,
+  //     9: 16,
+  //     10: 18,
+  //   },
+  //   willenskraft: {
+  //     1: 0,
+  //     2: 1,
+  //     3: 2,
+  //     4: 3,
+  //     5: 4,
+  //     6: 5,
+  //     7: 6,
+  //     8: 7,
+  //     9: 8,
+  //     10: 9,
+  //   },
+  // };
 
   const [checkedDots, setCheckedDots] = useState<{
     [key in DotValues]: boolean;
@@ -53,10 +91,10 @@ const DotRating = ({ type, increaseXp, decreaseXp }: DotRatingProps) => {
     <>
       {dotValues.map((value: DotValues) => {
         const dot = value;
-        const cost = pointsCost[type][dot];
+        const cost = pointsCost[category][dot];
         return (
           <input
-            key={`${type}-${dot}`}
+            key={`${category}-${dot}`}
             type="checkbox"
             checked={checkedDots[dot]}
             onChange={handleDotChange(dot, cost)}
