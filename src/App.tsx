@@ -12,7 +12,7 @@ function App() {
       <div>
         <label>XP: {xp}</label>
       </div>
-      <DotRating type="skill" increaseXp={increaseXp} decreaseXp={decreaseXp}/>
+      <DotRating category="talente" increaseXp={increaseXp} decreaseXp={decreaseXp}/>
     </>
   );
 }
