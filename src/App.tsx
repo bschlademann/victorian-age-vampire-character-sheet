@@ -246,13 +246,13 @@ const App: React.FC = () => {
   // Initialize Attributes (default to prefill value or 1)
   Object.values(categories.attribute).forEach(group => {
     group.forEach(trait => {
-      initialTraits[trait] = prefill.hasOwnProperty(trait) ? prefill[trait] : 1;
+      initialTraits[trait] = Object.prototype.hasOwnProperty.call(prefill, trait) ? prefill[trait] : 1;
     });
   });
   // Initialize Fähigkeiten (default to prefill value or 0)
-  Object.entries(categories.fähigkeiten).forEach(([group, traitList]) => {
+  Object.entries(categories.fähigkeiten).forEach(([, traitList]) => {
     traitList.forEach(trait => {
-      initialTraits[trait] = prefill.hasOwnProperty(trait) ? prefill[trait] : 0;
+      initialTraits[trait] = Object.prototype.hasOwnProperty.call(prefill, trait) ? prefill[trait] : 0;
     });
   });
   // Fixed Vorteile
@@ -273,7 +273,7 @@ const App: React.FC = () => {
   const [traits, setTraits] = useState<{ [key: string]: number | string }>(initialTraits);
   const [ep, setEP] = useState<number>(350);
 
-  function handleChange(trait: string, newLevel: number, costCategory: string | null, max: number) {
+  function handleChange(trait: string, newLevel: number, costCategory: string | null) {
     if (!costCategory) {
       setTraits({ ...traits, [trait]: newLevel });
       return;
