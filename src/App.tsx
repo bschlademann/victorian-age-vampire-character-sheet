@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
 //––– Types for fixed trait definitions –––
 interface FixedTrait {
@@ -21,46 +21,46 @@ interface Categories {
 
 const categories: Categories = {
   attribute: {
-    körperlich: ['körperkraft', 'geschick', 'widerstand'],
-    sozial: ['charisma', 'manipulation', 'erscheinung'],
-    geistig: ['wahrnehmung', 'intelligenz', 'geistesschärfe'],
+    körperlich: ["körperkraft", "geschick", "widerstand"],
+    sozial: ["charisma", "manipulation", "erscheinung"],
+    geistig: ["wahrnehmung", "intelligenz", "geistesschärfe"],
   },
   fähigkeiten: {
     talente: [
-      'alertness',
-      'athletics',
-      'brawl',
-      'dodge',
-      'empathy',
-      'expression',
-      'intimidation',
-      'leadership',
-      'streetwise',
-      'subterfuge',
+      "alertness",
+      "athletics",
+      "brawl",
+      "dodge",
+      "empathy",
+      "expression",
+      "intimidation",
+      "leadership",
+      "streetwise",
+      "subterfuge",
     ],
     fähigkeiten: [
-      'animal ken',
-      'crafts',
-      'etiquette',
-      'firearms',
-      'melee',
-      'performance',
-      'ride',
-      'security',
-      'stealth',
-      'survival',
+      "animal ken",
+      "crafts",
+      "etiquette",
+      "firearms",
+      "melee",
+      "performance",
+      "ride",
+      "security",
+      "stealth",
+      "survival",
     ],
     kenntnisse: [
-      'academics',
-      'enigma',
-      'finance',
-      'investigation',
-      'law',
-      'linguistics',
-      'medicine',
-      'occult',
-      'politics',
-      'science',
+      "academics",
+      "enigma",
+      "finance",
+      "investigation",
+      "law",
+      "linguistics",
+      "medicine",
+      "occult",
+      "politics",
+      "science",
     ],
   },
 };
@@ -80,32 +80,38 @@ const fixedTugenden: FixedTrait[] = [
   { name: "Gewissen", prefill: 1, costCategory: "tugenden", max: 5 },
   { name: "Selbstbeherrschung", prefill: 1, costCategory: "tugenden", max: 5 },
   { name: "Mut", prefill: 1, costCategory: "tugenden", max: 5 },
-  { name: "Menschlichkeit", prefill: 1, costCategory: "menschlichkeit", max: 10 },
+  {
+    name: "Menschlichkeit",
+    prefill: 1,
+    costCategory: "menschlichkeit",
+    max: 10,
+  },
   { name: "Willenskraft", prefill: 1, costCategory: "willenskraft", max: 10 },
 ];
 
 //––– Prefill Object –––
 const prefill: { [key: string]: number } = {
-  "körperkraft": 1,
-  "geschick": 1,
-  "widerstand": 1,
-  "charisma": 1,
-  "manipulation": 1,
-  "erscheinung": 1,
-  "wahrnehmung": 1,
-  "intelligenz": 1,
-  "alertness": 1,
-  "brawl": 1,
-  "dodge": 2,
-  "firearms": 1,
-  "ride": 1,
-  "linguistics": 3,
-  "ally": 1,
-  "generation": 5,
-  "status": 1,
-  "gewissen": 1,
-  "selbstbeherrschung": 1,
-  "mut": 1,
+  körperkraft: 1,
+  geschick: 1,
+  widerstand: 1,
+  charisma: 1,
+  manipulation: 1,
+  erscheinung: 1,
+  wahrnehmung: 1,
+  intelligenz: 1,
+  alertness: 1,
+  brawl: 1,
+  dodge: 2,
+  firearms: 1,
+  melee: 1,
+  ride: 1,
+  linguistics: 3,
+  ally: 1,
+  generation: 5,
+  status: 1,
+  gewissen: 1,
+  selbstbeherrschung: 1,
+  mut: 1,
 };
 
 //––– Cost Mapping –––
@@ -118,12 +124,28 @@ const costMapping: { [key: string]: { [key: number]: number } } = {
   disziplinNonClan: { 1: 10, 2: 7, 3: 14, 4: 21, 5: 28 },
   tugenden: { 1: 0, 2: 2, 3: 4, 4: 6, 5: 8 },
   menschlichkeit: {
-    1: 0, 2: 2, 3: 4, 4: 6, 5: 8,
-    6: 10, 7: 12, 8: 14, 9: 16, 10: 18,
+    1: 0,
+    2: 2,
+    3: 4,
+    4: 6,
+    5: 8,
+    6: 10,
+    7: 12,
+    8: 14,
+    9: 16,
+    10: 18,
   },
   willenskraft: {
-    1: 0, 2: 1, 3: 2, 4: 3, 5: 4,
-    6: 5, 7: 6, 8: 7, 9: 8, 10: 9,
+    1: 0,
+    2: 1,
+    3: 2,
+    4: 3,
+    5: 4,
+    6: 5,
+    7: 6,
+    8: 7,
+    9: 8,
+    10: 9,
   },
 };
 
@@ -139,7 +161,11 @@ const maxLevels: { [key: string]: number } = {
   willenskraft: 10,
 };
 
-function calculateCost(categoryKey: string, currentLevel: number, newLevel: number): number {
+function calculateCost(
+  categoryKey: string,
+  currentLevel: number,
+  newLevel: number
+): number {
   let cost = 0;
   for (let lvl = currentLevel + 1; lvl <= newLevel; lvl++) {
     cost += costMapping[categoryKey][lvl];
@@ -152,11 +178,22 @@ interface TraitRowProps {
   trait: string;
   currentLevel: number;
   costCategory: string | null;
-  onChange: (trait: string, newLevel: number, costCategory: string | null, max: number) => void;
+  onChange: (
+    trait: string,
+    newLevel: number,
+    costCategory: string | null,
+    max: number
+  ) => void;
   max?: number;
 }
 
-function TraitRow({ trait, currentLevel, costCategory, onChange, max }: TraitRowProps) {
+function TraitRow({
+  trait,
+  currentLevel,
+  costCategory,
+  onChange,
+  max,
+}: TraitRowProps) {
   const computedMax = max || (costCategory ? maxLevels[costCategory] : 5);
   const dots = [];
   for (let i = 1; i <= computedMax; i++) {
@@ -165,7 +202,6 @@ function TraitRow({ trait, currentLevel, costCategory, onChange, max }: TraitRow
       <span
         key={i}
         onClick={() => {
-          // Toggle off if the first dot is clicked while level is 1.
           if (currentLevel === 1 && i === 1 && filled) {
             onChange(trait, 0, costCategory, computedMax);
           } else {
@@ -174,18 +210,24 @@ function TraitRow({ trait, currentLevel, costCategory, onChange, max }: TraitRow
         }}
         className="dot"
         style={{
-          backgroundColor: filled ? '#000' : '#fff',
-          color: filled ? '#fff' : '#000'
+          backgroundColor: filled ? "#000" : "#fff",
+          color: filled ? "#fff" : "#000",
         }}
-      >
-        {/* Dot is filled by background color */}
-      </span>
+      />
     );
   }
+
+  // Show the cost for the next dot if applicable
+  const nextCost =
+    costCategory && currentLevel < computedMax
+      ? costMapping[costCategory][currentLevel + 1]
+      : null;
+
   return (
     <div className="trait-row">
       <span className="trait-name">{trait}</span>
       {dots}
+      {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
     </div>
   );
 }
@@ -195,13 +237,26 @@ interface CustomTraitRowProps {
   traitKey: string;
   currentLevel: number;
   costCategory: string | null;
-  onChange: (traitKey: string, newLevel: number, costCategory: string | null, max: number) => void;
+  onChange: (
+    traitKey: string,
+    newLevel: number,
+    costCategory: string | null,
+    max: number
+  ) => void;
   max?: number;
   value: string;
   onNameChange: (key: string, newValue: string) => void;
 }
 
-function CustomTraitRow({ traitKey, currentLevel, costCategory, onChange, max, value, onNameChange }: CustomTraitRowProps) {
+function CustomTraitRow({
+  traitKey,
+  currentLevel,
+  costCategory,
+  onChange,
+  max,
+  value,
+  onNameChange,
+}: CustomTraitRowProps) {
   const computedMax = max || (costCategory ? maxLevels[costCategory] : 5);
   const dots = [];
   for (let i = 1; i <= computedMax; i++) {
@@ -218,24 +273,29 @@ function CustomTraitRow({ traitKey, currentLevel, costCategory, onChange, max, v
         }}
         className="dot"
         style={{
-          backgroundColor: filled ? '#000' : '#fff',
-          color: filled ? '#fff' : '#000'
+          backgroundColor: filled ? "#000" : "#fff",
+          color: filled ? "#fff" : "#000",
         }}
-      >
-        {/* Dot is filled by background color */}
-      </span>
+      />
     );
   }
+
+  const nextCost =
+    costCategory && currentLevel < computedMax
+      ? costMapping[costCategory][currentLevel + 1]
+      : null;
+
   return (
     <div className="trait-row">
-      <input 
-         type="text" 
-         className="custom-input" 
-         placeholder="Custom name" 
-         value={value} 
-         onChange={(e) => onNameChange(traitKey + "_name", e.target.value)}
+      <input
+        type="text"
+        className="custom-input"
+        placeholder="Custom name"
+        value={value}
+        onChange={(e) => onNameChange(traitKey + "_name", e.target.value)}
       />
       {dots}
+      {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
     </div>
   );
 }
@@ -244,36 +304,54 @@ const App: React.FC = () => {
   const initialTraits: { [key: string]: number | string } = {};
 
   // Initialize Attributes (default to prefill value or 1)
-  Object.values(categories.attribute).forEach(group => {
-    group.forEach(trait => {
-      initialTraits[trait] = Object.prototype.hasOwnProperty.call(prefill, trait) ? prefill[trait] : 1;
+  Object.values(categories.attribute).forEach((group) => {
+    group.forEach((trait) => {
+      initialTraits[trait] = Object.prototype.hasOwnProperty.call(
+        prefill,
+        trait
+      )
+        ? prefill[trait]
+        : 1;
     });
   });
   // Initialize Fähigkeiten (default to prefill value or 0)
   Object.entries(categories.fähigkeiten).forEach(([, traitList]) => {
-    traitList.forEach(trait => {
-      initialTraits[trait] = Object.prototype.hasOwnProperty.call(prefill, trait) ? prefill[trait] : 0;
+    traitList.forEach((trait) => {
+      initialTraits[trait] = Object.prototype.hasOwnProperty.call(
+        prefill,
+        trait
+      )
+        ? prefill[trait]
+        : 0;
     });
   });
   // Fixed Vorteile
-  [...fixedHintergruende, ...fixedDisziplinen, ...fixedTugenden].forEach(item => {
-    initialTraits[item.name] = item.prefill;
-  });
+  [...fixedHintergruende, ...fixedDisziplinen, ...fixedTugenden].forEach(
+    (item) => {
+      initialTraits[item.name] = item.prefill;
+    }
+  );
   // Custom Hintergründe: 5 rows (dot count and custom name)
   for (let i = 1; i <= 5; i++) {
     initialTraits[`Hintergrund_custom_${i}`] = 0;
-    initialTraits[`Hintergrund_custom_${i}_name`] = '';
+    initialTraits[`Hintergrund_custom_${i}_name`] = "";
   }
   // Custom Disziplinen: 5 rows (dot count and custom name)
   for (let i = 1; i <= 5; i++) {
     initialTraits[`Disziplin_custom_${i}`] = 0;
-    initialTraits[`Disziplin_custom_${i}_name`] = '';
+    initialTraits[`Disziplin_custom_${i}_name`] = "";
   }
 
-  const [traits, setTraits] = useState<{ [key: string]: number | string }>(initialTraits);
+  const [traits, setTraits] = useState<{ [key: string]: number | string }>(
+    initialTraits
+  );
   const [ep, setEP] = useState<number>(350);
 
-  function handleChange(trait: string, newLevel: number, costCategory: string | null) {
+  function handleChange(
+    trait: string,
+    newLevel: number,
+    costCategory: string | null
+  ) {
     if (!costCategory) {
       setTraits({ ...traits, [trait]: newLevel });
       return;
@@ -283,7 +361,7 @@ const App: React.FC = () => {
     if (newLevel > currentLevel) {
       const cost = calculateCost(costCategory, currentLevel, newLevel);
       if (cost > ep) {
-        alert('Not enough EP');
+        alert("Not enough EP");
         return;
       }
       setEP(ep - cost);
@@ -307,7 +385,7 @@ const App: React.FC = () => {
         <h1>Vampire: The Masquerade Character Sheet</h1>
         <div className="ep-display">EP: {ep}</div>
       </header>
-      
+
       {/* Row 1: Attributes */}
       <div className="section-row">
         <h2>Attributes</h2>
@@ -315,7 +393,7 @@ const App: React.FC = () => {
           <div className="column">
             <h3>Körperlich</h3>
             <div className="attribute column-content">
-              {categories.attribute.körperlich.map(trait => (
+              {categories.attribute.körperlich.map((trait) => (
                 <TraitRow
                   key={trait}
                   trait={trait}
@@ -330,7 +408,7 @@ const App: React.FC = () => {
           <div className="column">
             <h3>Sozial</h3>
             <div className="attribute column-content">
-              {categories.attribute.sozial.map(trait => (
+              {categories.attribute.sozial.map((trait) => (
                 <TraitRow
                   key={trait}
                   trait={trait}
@@ -345,7 +423,7 @@ const App: React.FC = () => {
           <div className="column">
             <h3>Geistig</h3>
             <div className="attribute column-content">
-              {categories.attribute.geistig.map(trait => (
+              {categories.attribute.geistig.map((trait) => (
                 <TraitRow
                   key={trait}
                   trait={trait}
@@ -359,7 +437,7 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Row 2: Fähigkeiten */}
       <div className="section-row">
         <h2>Fähigkeiten</h2>
@@ -367,7 +445,7 @@ const App: React.FC = () => {
           <div className="column">
             <h3>Talente</h3>
             <div className="column-content">
-              {categories.fähigkeiten.talente.map(trait => (
+              {categories.fähigkeiten.talente.map((trait) => (
                 <TraitRow
                   key={trait}
                   trait={trait}
@@ -382,7 +460,7 @@ const App: React.FC = () => {
           <div className="column">
             <h3>Fertigkeiten</h3>
             <div className="column-content">
-              {categories.fähigkeiten.fähigkeiten.map(trait => (
+              {categories.fähigkeiten.fähigkeiten.map((trait) => (
                 <TraitRow
                   key={trait}
                   trait={trait}
@@ -397,7 +475,7 @@ const App: React.FC = () => {
           <div className="column">
             <h3>Kenntnisse</h3>
             <div className="column-content">
-              {categories.fähigkeiten.kenntnisse.map(trait => (
+              {categories.fähigkeiten.kenntnisse.map((trait) => (
                 <TraitRow
                   key={trait}
                   trait={trait}
@@ -411,7 +489,7 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Row 3: Vorteile */}
       <div className="section-row">
         <h2>Vorteile</h2>
@@ -420,7 +498,7 @@ const App: React.FC = () => {
           <div className="column">
             <h3>Hintergründe</h3>
             <div className="column-content">
-              {fixedHintergruende.map(item => (
+              {fixedHintergruende.map((item) => (
                 <TraitRow
                   key={item.name}
                   trait={item.name}
@@ -448,12 +526,12 @@ const App: React.FC = () => {
               })}
             </div>
           </div>
-          
+
           {/* Disziplinen Column */}
           <div className="column">
             <h3>Disziplinen</h3>
             <div className="column-content">
-              {fixedDisziplinen.map(item => (
+              {fixedDisziplinen.map((item) => (
                 <TraitRow
                   key={item.name}
                   trait={item.name}
@@ -481,12 +559,12 @@ const App: React.FC = () => {
               })}
             </div>
           </div>
-          
+
           {/* Tugenden Column */}
           <div className="column">
             <h3>Tugenden</h3>
             <div className="attribute column-content">
-              {fixedTugenden.map(item => (
+              {fixedTugenden.map((item) => (
                 <TraitRow
                   key={item.name}
                   trait={item.name}
