@@ -86,20 +86,18 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
         }
         className="discipline-select"
       >
-        <option value="">Select Discipline</option>
-        {allDisciplines.map(discipline => (<option key={`discipline-${discipline}`}>{discipline}</option>))}
+        <option value="">-</option>
+        {allDisciplines.map((discipline) => (
+          <option key={`discipline-${discipline}`}>{discipline}</option>
+        ))}
       </select>
-
-      <label className="clan-checkbox">
         <input
           type="checkbox"
+          className="clan-checkbox"
           checked={isClan}
           onChange={() => handleClanToggle(`Discipline_${index}`)}
-        />
-        {/* Could label as "Clan" if you want */}
-      </label>
-
-      {dots}
+        />        
+      <div className="dots-container">{dots}</div>
       {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
     </div>
   );
