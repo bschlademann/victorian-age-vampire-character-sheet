@@ -47,7 +47,7 @@ const App: React.FC = () => {
   initialDisciplines.forEach((item, index) => {
     initialTraits[`Discipline_${index}`] = item.prefill;
     initialTraits[`Discipline_${index}_name`] = item.name;
-    initialTraits[`Discipline_${index}_isClan`] = item.isClan;
+    initialTraits[`Discipline_${index}_isClan`] = item.isClan ?? false; 
   });
 
   // Custom Hintergründe
@@ -66,7 +66,6 @@ const App: React.FC = () => {
     trait: string,
     newLevel: number,
     costCategory: string | null,
-    max: number = 5
   ) {
     if (!costCategory) {
       // For backgrounds with no costCategory
