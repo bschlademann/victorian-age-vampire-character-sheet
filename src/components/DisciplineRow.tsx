@@ -1,9 +1,7 @@
 // src/components/DisciplineRow.tsx
 
 import React from "react";
-import { disciplineHighlights, costMapping, maxLevels } from "../domain";
-import { calculateCost } from "../utils"; // If you put it in utils
-import { TraitRowProps } from "../types";
+import { disciplineHighlights, costMapping } from "../domain";
 
 interface DisciplineRowProps {
   index: number;
@@ -28,7 +26,6 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
   disciplineName,
   currentLevel,
   isClan,
-  ep,
   handleChange,
   handleNameChange,
   handleClanToggle,
