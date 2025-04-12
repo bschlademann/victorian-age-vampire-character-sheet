@@ -1,14 +1,10 @@
-// src/components/DisciplineRow.tsx
-
 import React from "react";
 import { disciplineHighlights, costMapping, allDisciplines } from "../domain";
-// import "../styles/DisciplineRow.css";
 
 interface DisciplineRowProps {
   index: number;
   disciplineName: string;
   currentLevel: number;
-  isClan: boolean;
   ep: number;
   handleChange: (
     trait: string,
@@ -16,7 +12,6 @@ interface DisciplineRowProps {
     costCategory: string | null
   ) => void;
   handleNameChange: (key: string, newValue: string) => void;
-  handleClanToggle: (disciplineKey: string) => void;
   handleDotHover: (discipline: string, level: number) => void;
   handleDotHoverLeave: () => void;
 }
@@ -25,14 +20,12 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
   index,
   disciplineName,
   currentLevel,
-  isClan,
   handleChange,
   handleNameChange,
-  handleClanToggle,
   handleDotHover,
   handleDotHoverLeave,
 }) => {
-  const costCategory = isClan ? "disziplinenClan" : "disziplinNonClan";
+  const costCategory = index < 3 ? "disziplinenClan" : "disziplinNonClan";
   const disciplineSelected = Boolean(disciplineName);
 
   const dots = [];
@@ -85,18 +78,13 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
           handleNameChange(`Discipline_${index}_name`, e.target.value)
         }
         className="discipline-select"
+        
       >
         <option value="">-</option>
         {allDisciplines.map((discipline) => (
           <option key={`discipline-${discipline}`}>{discipline}</option>
         ))}
       </select>
-        <input
-          type="checkbox"
-          className="clan-checkbox"
-          checked={isClan}
-          onChange={() => handleClanToggle(`Discipline_${index}`)}
-        />        
       <div className="dots-container">{dots}</div>
       {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
     </div>
