@@ -3,38 +3,37 @@
 import React from "react";
 import { CustomTraitRowProps } from "../types";
 import { maxLevels, costMapping, disciplineHighlights } from "../domain";
+import "../styles/CustomTraitRow.css";
 
 export const CustomTraitRow: React.FC<CustomTraitRowProps> = ({
   traitKey,
   currentLevel,
   costCategory,
   onChange,
-  max,
   value,
   onNameChange,
+  isHighlighted,
   onDotHover,
   onDotHoverLeave,
-  isHighlighted,
 }) => {
-  const computedMax = max || (costCategory ? maxLevels[costCategory] : 5);
-
+  const computedMax = costCategory ? maxLevels[costCategory] : 5;
   const isDiscipline = Object.prototype.hasOwnProperty.call(
     disciplineHighlights,
     traitKey
   );
 
-  // Renders the clickable dots
   const dots = [];
   for (let i = 1; i <= computedMax; i++) {
     const filled = i <= currentLevel;
     dots.push(
       <span
         key={i}
+        className="dot"
         onClick={() => {
           if (currentLevel === 1 && i === 1 && filled) {
-            onChange(traitKey, 0, costCategory, computedMax);
+            onChange(traitKey, 0, costCategory);
           } else {
-            onChange(traitKey, i, costCategory, computedMax);
+            onChange(traitKey, i, costCategory);
           }
         }}
         onMouseEnter={
@@ -43,7 +42,6 @@ export const CustomTraitRow: React.FC<CustomTraitRowProps> = ({
         onMouseLeave={
           isDiscipline && onDotHoverLeave ? onDotHoverLeave : undefined
         }
-        className="dot"
         style={{
           backgroundColor: filled ? "#000" : "#fff",
           color: filled ? "#fff" : "#000",

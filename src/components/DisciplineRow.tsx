@@ -2,6 +2,7 @@
 
 import React from "react";
 import { disciplineHighlights, costMapping } from "../domain";
+import "../styles/DisciplineRow.css";
 
 interface DisciplineRowProps {
   index: number;
@@ -12,8 +13,7 @@ interface DisciplineRowProps {
   handleChange: (
     trait: string,
     newLevel: number,
-    costCategory: string | null,
-    max: number
+    costCategory: string | null
   ) => void;
   handleNameChange: (key: string, newValue: string) => void;
   handleClanToggle: (disciplineKey: string) => void;
@@ -41,14 +41,14 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
     dots.push(
       <span
         key={i}
-        // Only clickable if discipline is selected
+        className={`dot${disciplineSelected ? "" : " disabled-dot"}`}
         onClick={
           disciplineSelected
             ? () => {
                 if (currentLevel === 1 && i === 1 && filled) {
-                  handleChange(`Discipline_${index}`, 0, costCategory, 5);
+                  handleChange(`Discipline_${index}`, 0, costCategory);
                 } else {
-                  handleChange(`Discipline_${index}`, i, costCategory, 5);
+                  handleChange(`Discipline_${index}`, i, costCategory);
                 }
               }
             : undefined
@@ -63,7 +63,6 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
             ? handleDotHoverLeave
             : undefined
         }
-        className={`dot${disciplineSelected ? "" : " disabled-dot"}`}
         style={{
           backgroundColor: filled ? "#000" : "#fff",
           color: filled ? "#fff" : "#000",
@@ -88,14 +87,18 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
         className="discipline-select"
       >
         <option value="">Select Discipline</option>
+        {/* You can map over allDisciplines from domain here if desired */}
       </select>
+
       <label className="clan-checkbox">
         <input
           type="checkbox"
           checked={isClan}
           onChange={() => handleClanToggle(`Discipline_${index}`)}
         />
+        {/* Could label as "Clan" if you want */}
       </label>
+
       {dots}
       {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
     </div>

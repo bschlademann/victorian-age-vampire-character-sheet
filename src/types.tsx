@@ -25,7 +25,6 @@ export interface FixedTrait {
       trait: string,
       newLevel: number,
       costCategory: string | null,
-      max: number
     ) => void;
     max?: number;
     onDotHover?: (discipline: string, level: number) => void;
@@ -41,7 +40,6 @@ export interface FixedTrait {
       traitKey: string,
       newLevel: number,
       costCategory: string | null,
-      max: number
     ) => void;
     max?: number;
     value: string;

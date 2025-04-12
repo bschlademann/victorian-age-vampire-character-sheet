@@ -1,0 +1,61 @@
+/* src/styles/App.css */
+
+/* Overall container */
+.sheet-container {
+    margin: 0 auto;
+    max-width: 1024px;
+    padding: 1rem;
+    font-family: sans-serif;
+  }
+  
+  /* Simple styling for EP and header */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .ep-display {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+  
+  .section-row {
+    margin-top: 2rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+  }
+  
+  /* Each row has multiple columns */
+  .row-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* For each column of traits */
+  .column {
+    flex: 1;
+    margin: 0 0.5rem;
+  }
+  
+  .column h3 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .column-content {
+    border: 1px solid #f0f0f0;
+    padding: 0.5rem;
+  }
+  
+  /* Disciplines layout */
+  .disciplines-grid {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .disciplines-row {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+  }
+  

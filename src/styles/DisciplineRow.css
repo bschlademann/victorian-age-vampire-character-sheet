@@ -1,0 +1,39 @@
+/* src/styles/DisciplineRow.css */
+
+.trait-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.3rem;
+  }
+  
+  .discipline-select {
+    min-width: 140px;
+    margin-right: 0.5rem;
+  }
+  
+  .clan-checkbox {
+    margin-right: 1rem;
+  }
+  
+  .dot {
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    display: inline-block;
+    user-select: none;
+    text-align: center;
+    line-height: 16px;
+  }
+  
+  .disabled-dot {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  .dot-cost {
+    margin-left: 8px;
+    font-style: italic;
+  }
+  

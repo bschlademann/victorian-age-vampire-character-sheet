@@ -34,37 +34,6 @@ const DotRating = ({ category, increaseXp, decreaseXp }: DotRatingProps) => {
     tugenden: { 1: 0, 2: 2, 3: 4, 4: 6, 5: 8 },
   };
 
-  // | "menschlichkeit"
-  // | "willenskraft";
-
-  // type DotValuesHumanity = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
-  // const humanity = {
-  //   menschlichkeit: {
-  //     1: 0,
-  //     2: 2,
-  //     3: 4,
-  //     4: 6,
-  //     5: 8,
-  //     6: 10,
-  //     7: 12,
-  //     8: 14,
-  //     9: 16,
-  //     10: 18,
-  //   },
-  //   willenskraft: {
-  //     1: 0,
-  //     2: 1,
-  //     3: 2,
-  //     4: 3,
-  //     5: 4,
-  //     6: 5,
-  //     7: 6,
-  //     8: 7,
-  //     9: 8,
-  //     10: 9,
-  //   },
-  // };
-
   const [checkedDots, setCheckedDots] = useState<{
     [key in DotValues]: boolean;
   }>({

@@ -1,0 +1,45 @@
+/* src/styles/CustomTraitRow.css */
+
+.trait-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.3rem;
+  }
+  
+  .trait-row.highlight {
+    background-color: rgba(255, 230, 0, 0.2);
+  }
+  
+  .custom-input {
+    width: 100px;
+    margin-right: 0.5rem;
+    padding: 2px 4px;
+    font-size: 0.9rem;
+    border: 1px solid #999;
+  }
+  
+  .dot {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    cursor: pointer;
+    text-align: center;
+    line-height: 16px;
+    user-select: none;
+    font-size: 0.8rem;
+    transition: background-color 0.2s ease;
+    box-shadow: 0 0 0 1px #fff; 
+  }
+  
+  .dot:hover {
+    filter: brightness(85%);
+  }
+  
+  .dot-cost {
+    margin-left: 8px;
+    font-style: italic;
+  }
+  

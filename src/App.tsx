@@ -1,7 +1,7 @@
 // src/App.tsx
-
 import React, { useState } from "react";
-import "./App.css";
+import "./styles/App.css"; // Main app styles
+
 import {
   categories,
   fixedHintergruende,
@@ -9,12 +9,13 @@ import {
   initialDisciplines,
   prefill,
   disciplineHighlights,
+  costMapping,
 } from "./domain";
+
 import { TraitRow } from "./components/TraitRow";
 import { CustomTraitRow } from "./components/CustomTraitRow";
 import { DisciplineRow } from "./components/DisciplineRow";
 import { calculateCost } from "./utils";
-import { costMapping } from "./domain";
 
 const App: React.FC = () => {
   // Prepare initial traits state
@@ -47,7 +48,7 @@ const App: React.FC = () => {
   initialDisciplines.forEach((item, index) => {
     initialTraits[`Discipline_${index}`] = item.prefill;
     initialTraits[`Discipline_${index}_name`] = item.name;
-    initialTraits[`Discipline_${index}_isClan`] = item.isClan ?? false; 
+    initialTraits[`Discipline_${index}_isClan`] = item.isClan ?? false;
   });
 
   // Custom Hintergründe
@@ -65,10 +66,10 @@ const App: React.FC = () => {
   function handleChange(
     trait: string,
     newLevel: number,
-    costCategory: string | null,
+    costCategory: string | null
   ) {
+    // For backgrounds with no costCategory
     if (!costCategory) {
-      // For backgrounds with no costCategory
       setTraits({ ...traits, [trait]: newLevel });
       return;
     }
@@ -143,7 +144,6 @@ const App: React.FC = () => {
                   trait={trait}
                   currentLevel={traits[trait] as number}
                   costCategory="attribute"
-                  max={5}
                   onChange={handleChange}
                   isHighlighted={highlightedTraits.includes(trait)}
                 />
@@ -159,7 +159,6 @@ const App: React.FC = () => {
                   trait={trait}
                   currentLevel={traits[trait] as number}
                   costCategory="attribute"
-                  max={5}
                   onChange={handleChange}
                   isHighlighted={highlightedTraits.includes(trait)}
                 />
@@ -175,7 +174,6 @@ const App: React.FC = () => {
                   trait={trait}
                   currentLevel={traits[trait] as number}
                   costCategory="attribute"
-                  max={5}
                   onChange={handleChange}
                   isHighlighted={highlightedTraits.includes(trait)}
                 />
@@ -198,7 +196,6 @@ const App: React.FC = () => {
                   trait={trait}
                   currentLevel={traits[trait] as number}
                   costCategory="talente"
-                  max={5}
                   onChange={handleChange}
                   isHighlighted={highlightedTraits.includes(trait)}
                 />
@@ -214,7 +211,6 @@ const App: React.FC = () => {
                   trait={trait}
                   currentLevel={traits[trait] as number}
                   costCategory="fertigkeiten"
-                  max={5}
                   onChange={handleChange}
                   isHighlighted={highlightedTraits.includes(trait)}
                 />
@@ -230,7 +226,6 @@ const App: React.FC = () => {
                   trait={trait}
                   currentLevel={traits[trait] as number}
                   costCategory="kenntnisse"
-                  max={5}
                   onChange={handleChange}
                   isHighlighted={highlightedTraits.includes(trait)}
                 />
@@ -254,7 +249,6 @@ const App: React.FC = () => {
                   trait={item.name}
                   currentLevel={traits[item.name] as number}
                   costCategory={item.costCategory}
-                  max={item.max}
                   onChange={handleChange}
                   isHighlighted={highlightedTraits.includes(item.name)}
                 />
@@ -268,7 +262,6 @@ const App: React.FC = () => {
                     traitKey={key}
                     currentLevel={traits[key] as number}
                     costCategory={null}
-                    max={5}
                     value={traits[key + "_name"] as string}
                     onChange={handleChange}
                     onNameChange={handleNameChange}
@@ -319,7 +312,6 @@ const App: React.FC = () => {
                   trait={item.name}
                   currentLevel={traits[item.name] as number}
                   costCategory={item.costCategory}
-                  max={item.max}
                   onChange={handleChange}
                   isHighlighted={highlightedTraits.includes(item.name)}
                 />
