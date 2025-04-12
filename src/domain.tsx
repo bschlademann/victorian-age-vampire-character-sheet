@@ -59,15 +59,19 @@ export const allDisciplines = [
   "Animalism",
   "Auspex",
   "Celerity",
+  "Chimerstry",
+  "Dementation",
   "Dominate",
   "Fortitude",
   "Obfuscate",
+  "Obtenebration",
   "Potence",
   "Presence",
   "Protean",
-  "Blood Sorcery",
-  "Thin-Blood Alchemy",
-  "Oblivion",
+  "Quietus",
+  "Serpentis",
+  // "Thaumaturgy",
+  // "Vicissitude"
 ];
 
 // 6 total disciplines
