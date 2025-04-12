@@ -1,416 +1,62 @@
+// src/App.tsx
+
 import React, { useState } from "react";
 import "./App.css";
-
-//––– Types for fixed trait definitions –––
-interface FixedTrait {
-  name: string;
-  prefill: number;
-  costCategory: string | null;
-  max: number;
-}
-
-//––– Types for categories –––
-interface Categories {
-  attribute: {
-    [group: string]: string[];
-  };
-  fähigkeiten: {
-    [group: string]: string[];
-  };
-}
-
-const categories: Categories = {
-  attribute: {
-    körperlich: ["körperkraft", "geschick", "widerstand"],
-    sozial: ["charisma", "manipulation", "erscheinung"],
-    geistig: ["wahrnehmung", "intelligenz", "geistesschärfe"],
-  },
-  fähigkeiten: {
-    talente: [
-      "alertness",
-      "athletics",
-      "brawl",
-      "dodge",
-      "empathy",
-      "expression",
-      "intimidation",
-      "leadership",
-      "streetwise",
-      "subterfuge",
-    ],
-    fähigkeiten: [
-      "animal ken",
-      "crafts",
-      "etiquette",
-      "firearms",
-      "melee",
-      "performance",
-      "ride",
-      "security",
-      "stealth",
-      "survival",
-    ],
-    kenntnisse: [
-      "academics",
-      "enigma",
-      "finance",
-      "investigation",
-      "law",
-      "linguistics",
-      "medicine",
-      "occult",
-      "politics",
-      "science",
-    ],
-  },
-};
-
-//––– Fixed Vorteile –––
-const fixedHintergruende: FixedTrait[] = [
-  { name: "Ally", prefill: 1, costCategory: null, max: 5 },
-  { name: "Generation", prefill: 5, costCategory: null, max: 5 },
-  { name: "Status", prefill: 1, costCategory: null, max: 5 },
-];
-//––– Fixed Disziplinen –––
-// Note: Auspex, Celerity, and Presence are clan disciplines; the added ones use non clan costs.
-const fixedDisziplinen: FixedTrait[] = [
-  { name: "Auspex", prefill: 0, costCategory: "disziplinenClan", max: 5 },
-  { name: "Celerity", prefill: 0, costCategory: "disziplinenClan", max: 5 },
-  { name: "Presence", prefill: 0, costCategory: "disziplinenClan", max: 5 },
-  { name: "Obfuscate", prefill: 0, costCategory: "disziplinNonClan", max: 5 },
-  { name: "Dominate", prefill: 0, costCategory: "disziplinNonClan", max: 5 },
-  { name: "Fortitude", prefill: 0, costCategory: "disziplinNonClan", max: 5 },
-  { name: "Potence", prefill: 0, costCategory: "disziplinNonClan", max: 5 },
-];
-const fixedTugenden: FixedTrait[] = [
-  { name: "Gewissen", prefill: 1, costCategory: "tugenden", max: 5 },
-  { name: "Selbstbeherrschung", prefill: 1, costCategory: "tugenden", max: 5 },
-  { name: "Mut", prefill: 1, costCategory: "tugenden", max: 5 },
-  {
-    name: "Menschlichkeit",
-    prefill: 1,
-    costCategory: "menschlichkeit",
-    max: 10,
-  },
-  { name: "Willenskraft", prefill: 1, costCategory: "willenskraft", max: 10 },
-];
-
-//––– Prefill Object –––
-const prefill: { [key: string]: number } = {
-  körperkraft: 1,
-  geschick: 1,
-  widerstand: 1,
-  charisma: 1,
-  manipulation: 1,
-  erscheinung: 1,
-  wahrnehmung: 1,
-  intelligenz: 1,
-  alertness: 1,
-  brawl: 1,
-  dodge: 2,
-  firearms: 1,
-  melee: 1,
-  ride: 1,
-  linguistics: 3,
-  ally: 1,
-  generation: 5,
-  status: 1,
-  gewissen: 1,
-  selbstbeherrschung: 1,
-  mut: 1,
-};
-
-//––– Cost Mapping –––
-const costMapping: { [key: string]: { [key: number]: number } } = {
-  attribute: { 1: 0, 2: 4, 3: 8, 4: 12, 5: 16 },
-  talente: { 1: 3, 2: 2, 3: 4, 4: 6, 5: 8 },
-  fertigkeiten: { 1: 3, 2: 2, 3: 4, 4: 6, 5: 8 },
-  kenntnisse: { 1: 3, 2: 2, 3: 4, 4: 6, 5: 8 },
-  disziplinenClan: { 1: 10, 2: 5, 3: 10, 4: 15, 5: 20 },
-  disziplinNonClan: { 1: 10, 2: 7, 3: 14, 4: 21, 5: 28 },
-  tugenden: { 1: 0, 2: 2, 3: 4, 4: 6, 5: 8 },
-  menschlichkeit: {
-    1: 0,
-    2: 2,
-    3: 4,
-    4: 6,
-    5: 8,
-    6: 10,
-    7: 12,
-    8: 14,
-    9: 16,
-    10: 18,
-  },
-  willenskraft: {
-    1: 0,
-    2: 1,
-    3: 2,
-    4: 3,
-    5: 4,
-    6: 5,
-    7: 6,
-    8: 7,
-    9: 8,
-    10: 9,
-  },
-};
-
-const maxLevels: { [key: string]: number } = {
-  attribute: 5,
-  talente: 5,
-  fertigkeiten: 5,
-  kenntnisse: 5,
-  disziplinenClan: 5,
-  disziplinNonClan: 5,
-  tugenden: 5,
-  menschlichkeit: 10,
-  willenskraft: 10,
-};
-
-function calculateCost(
-  categoryKey: string,
-  currentLevel: number,
-  newLevel: number
-): number {
-  let cost = 0;
-  for (let lvl = currentLevel + 1; lvl <= newLevel; lvl++) {
-    cost += costMapping[categoryKey][lvl];
-  }
-  return cost;
-}
-
-//––– Discipline Highlights Mapping –––
-const disciplineHighlights: {
-  [discipline: string]: { [level: number]: string[] };
-} = {
-  Auspex: {
-    1: ["wahrnehmung"],
-    2: ["wahrnehmung", "empathy"],
-    3: ["wahrnehmung", "empathy"],
-    4: ["intelligenz", "subterfuge"],
-    5: ["wahrnehmung", "occult"],
-  },
-  Dominate: {
-    1: ["manipulation", "intimidation"],
-    2: ["manipulation", "leadership"],
-    3: ["geistesschärfe", "subterfuge"],
-    4: ["charisma", "leadership"],
-    5: ["charisma", "intimidation"],
-  },
-  Obfuscate: {
-    1: [],
-    2: ["geistesschärfe", "stealth"],
-    3: ["manipulation", "performance"],
-    4: ["charisma", "stealth"],
-    5: [],
-  },
-  Presence: {
-    1: ["charisma", "performance"],
-    2: ["charisma", "intimidation"],
-    3: ["erscheinung", "empathy"],
-    4: ["charisma", "subterfuge"],
-    5: ["willenskraft"],
-  },
-};
-
-//––– New Props for Hover Effect –––
-interface TraitRowProps {
-  trait: string;
-  currentLevel: number;
-  costCategory: string | null;
-  onChange: (
-    trait: string,
-    newLevel: number,
-    costCategory: string | null,
-    max: number
-  ) => void;
-  max?: number;
-  onDotHover?: (discipline: string, level: number) => void;
-  onDotHoverLeave?: () => void;
-  isHighlighted?: boolean;
-}
-
-function TraitRow({
-  trait,
-  currentLevel,
-  costCategory,
-  onChange,
-  max,
-  onDotHover,
-  onDotHoverLeave,
-  isHighlighted,
-}: TraitRowProps) {
-  const computedMax = max || (costCategory ? maxLevels[costCategory] : 5);
-  const dots = [];
-  const isDiscipline = Object.prototype.hasOwnProperty.call(
-    disciplineHighlights,
-    trait
-  );
-
-  for (let i = 1; i <= computedMax; i++) {
-    const filled = i <= currentLevel;
-    dots.push(
-      <span
-        key={i}
-        onClick={() => {
-          if (currentLevel === 1 && i === 1 && filled) {
-            onChange(trait, 0, costCategory, computedMax);
-          } else {
-            onChange(trait, i, costCategory, computedMax);
-          }
-        }}
-        onMouseEnter={
-          isDiscipline && onDotHover ? () => onDotHover(trait, i) : undefined
-        }
-        onMouseLeave={
-          isDiscipline && onDotHoverLeave ? onDotHoverLeave : undefined
-        }
-        className="dot"
-        style={{
-          backgroundColor: filled ? "#000" : "#fff",
-          color: filled ? "#fff" : "#000",
-        }}
-      />
-    );
-  }
-
-  const nextCost =
-    costCategory && currentLevel < computedMax
-      ? costMapping[costCategory][currentLevel + 1]
-      : null;
-
-  return (
-    <div className={`trait-row${isHighlighted ? " highlight" : ""}`}>
-      <span className="trait-name">{trait}</span>
-      {dots}
-      {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
-    </div>
-  );
-}
-
-interface CustomTraitRowProps {
-  traitKey: string;
-  currentLevel: number;
-  costCategory: string | null;
-  onChange: (
-    traitKey: string,
-    newLevel: number,
-    costCategory: string | null,
-    max: number
-  ) => void;
-  max?: number;
-  value: string;
-  onNameChange: (key: string, newValue: string) => void;
-  onDotHover?: (discipline: string, level: number) => void;
-  onDotHoverLeave?: () => void;
-  isHighlighted?: boolean;
-}
-
-function CustomTraitRow({
-  traitKey,
-  currentLevel,
-  costCategory,
-  onChange,
-  max,
-  value,
-  onNameChange,
-  onDotHover,
-  onDotHoverLeave,
-  isHighlighted,
-}: CustomTraitRowProps) {
-  const computedMax = max || (costCategory ? maxLevels[costCategory] : 5);
-  const dots = [];
-  const isDiscipline = Object.prototype.hasOwnProperty.call(
-    disciplineHighlights,
-    traitKey
-  );
-
-  for (let i = 1; i <= computedMax; i++) {
-    const filled = i <= currentLevel;
-    dots.push(
-      <span
-        key={i}
-        onClick={() => {
-          if (currentLevel === 1 && i === 1 && filled) {
-            onChange(traitKey, 0, costCategory, computedMax);
-          } else {
-            onChange(traitKey, i, costCategory, computedMax);
-          }
-        }}
-        onMouseEnter={
-          isDiscipline && onDotHover ? () => onDotHover(traitKey, i) : undefined
-        }
-        onMouseLeave={
-          isDiscipline && onDotHoverLeave ? onDotHoverLeave : undefined
-        }
-        className="dot"
-        style={{
-          backgroundColor: filled ? "#000" : "#fff",
-          color: filled ? "#fff" : "#000",
-        }}
-      />
-    );
-  }
-
-  const nextCost =
-    costCategory && currentLevel < computedMax
-      ? costMapping[costCategory][currentLevel + 1]
-      : null;
-
-  return (
-    <div className={`trait-row${isHighlighted ? " highlight" : ""}`}>
-      <input
-        type="text"
-        className="custom-input"
-        placeholder="Custom name"
-        value={value}
-        onChange={(e) => onNameChange(traitKey + "_name", e.target.value)}
-      />
-      {dots}
-      {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
-    </div>
-  );
-}
+import {
+  categories,
+  fixedHintergruende,
+  fixedTugenden,
+  initialDisciplines,
+  prefill,
+  disciplineHighlights,
+} from "./domain";
+import { TraitRow } from "./components/TraitRow";
+import { CustomTraitRow } from "./components/CustomTraitRow";
+import { DisciplineRow } from "./components/DisciplineRow";
+import { calculateCost } from "./utils";
+import { costMapping } from "./domain";
 
 const App: React.FC = () => {
-  const initialTraits: { [key: string]: number | string } = {};
+  // Prepare initial traits state
+  const initialTraits: { [key: string]: number | string | boolean } = {};
 
-  // Initialize Attributes (default to prefill value or 1)
+  // Prefill attributes with 1 or from `prefill`
   Object.values(categories.attribute).forEach((group) => {
     group.forEach((trait) => {
-      initialTraits[trait] = Object.prototype.hasOwnProperty.call(
-        prefill,
-        trait
-      )
+      initialTraits[trait] = Object.prototype.hasOwnProperty.call(prefill, trait)
         ? prefill[trait]
         : 1;
     });
   });
-  // Initialize Fähigkeiten (default to prefill value or 0)
+
+  // Prefill Fähigkeiten with 0 or from `prefill`
   Object.entries(categories.fähigkeiten).forEach(([, traitList]) => {
     traitList.forEach((trait) => {
-      initialTraits[trait] = Object.prototype.hasOwnProperty.call(
-        prefill,
-        trait
-      )
+      initialTraits[trait] = Object.prototype.hasOwnProperty.call(prefill, trait)
         ? prefill[trait]
         : 0;
     });
   });
+
   // Fixed Vorteile
-  [...fixedHintergruende, ...fixedDisziplinen, ...fixedTugenden].forEach(
-    (item) => {
-      initialTraits[item.name] = item.prefill;
-    }
-  );
-  // Custom Hintergründe: 5 rows (dot count and custom name)
+  [...fixedHintergruende, ...fixedTugenden].forEach((item) => {
+    initialTraits[item.name] = item.prefill;
+  });
+
+  // Initialize 6 disciplines
+  initialDisciplines.forEach((item, index) => {
+    initialTraits[`Discipline_${index}`] = item.prefill;
+    initialTraits[`Discipline_${index}_name`] = item.name;
+    initialTraits[`Discipline_${index}_isClan`] = item.isClan;
+  });
+
+  // Custom Hintergründe
   for (let i = 1; i <= 5; i++) {
     initialTraits[`Hintergrund_custom_${i}`] = 0;
     initialTraits[`Hintergrund_custom_${i}_name`] = "";
   }
-  // Note: Custom disciplines removed
 
-  const [traits, setTraits] = useState<{ [key: string]: number | string }>(
+  const [traits, setTraits] = useState<{ [key: string]: number | string | boolean }>(
     initialTraits
   );
   const [ep, setEP] = useState<number>(350);
@@ -419,14 +65,25 @@ const App: React.FC = () => {
   function handleChange(
     trait: string,
     newLevel: number,
-    costCategory: string | null
+    costCategory: string | null,
+    max: number = 5
   ) {
     if (!costCategory) {
+      // For backgrounds with no costCategory
       setTraits({ ...traits, [trait]: newLevel });
       return;
     }
+
+    // For disciplines, check if clan
+    if (trait.startsWith("Discipline_")) {
+      const index = trait.split("_")[1];
+      const isClan = traits[`Discipline_${index}_isClan`] as boolean;
+      costCategory = isClan ? "disziplinenClan" : "disziplinNonClan";
+    }
+
     const currentLevel = (traits[trait] as number) || 0;
     if (newLevel === currentLevel) return;
+
     if (newLevel > currentLevel) {
       const cost = calculateCost(costCategory, currentLevel, newLevel);
       if (cost > ep) {
@@ -435,6 +92,7 @@ const App: React.FC = () => {
       }
       setEP(ep - cost);
     } else {
+      // Refund logic
       let refund = 0;
       for (let lvl = newLevel + 1; lvl <= currentLevel; lvl++) {
         refund += costMapping[costCategory][lvl];
@@ -446,6 +104,15 @@ const App: React.FC = () => {
 
   function handleNameChange(key: string, newValue: string) {
     setTraits({ ...traits, [key]: newValue });
+  }
+
+  function handleClanToggle(disciplineKey: string) {
+    const index = disciplineKey.split("_")[1];
+    const currentIsClan = traits[`Discipline_${index}_isClan`] as boolean;
+    setTraits({
+      ...traits,
+      [`Discipline_${index}_isClan`]: !currentIsClan,
+    });
   }
 
   const handleDotHover = (discipline: string, level: number) => {
@@ -616,25 +283,29 @@ const App: React.FC = () => {
           {/* Disziplinen Column */}
           <div className="column">
             <h3>Disziplinen</h3>
-            <div className="column-content">
-              {fixedDisziplinen.map((item) => (
-                <TraitRow
-                  key={item.name}
-                  trait={item.name}
-                  currentLevel={traits[item.name] as number}
-                  costCategory={item.costCategory}
-                  max={item.max}
-                  onChange={handleChange}
-                  onDotHover={
-                    disciplineHighlights[item.name] ? handleDotHover : undefined
-                  }
-                  onDotHoverLeave={
-                    disciplineHighlights[item.name]
-                      ? handleDotHoverLeave
-                      : undefined
-                  }
-                  isHighlighted={highlightedTraits.includes(item.name)}
-                />
+            {/* 3 rows, 2 columns => 6 total disciplines */}
+            <div className="disciplines-grid">
+              {Array.from({ length: 3 }).map((_, rowIndex) => (
+                <div className="disciplines-row" key={rowIndex}>
+                  {Array.from({ length: 2 }).map((_, colIndex) => {
+                    const i = rowIndex * 2 + colIndex;
+                    return (
+                      <DisciplineRow
+                        key={`Discipline_${i}`}
+                        index={i}
+                        disciplineName={traits[`Discipline_${i}_name`] as string}
+                        currentLevel={traits[`Discipline_${i}`] as number}
+                        isClan={traits[`Discipline_${i}_isClan`] as boolean}
+                        ep={ep}
+                        handleChange={handleChange}
+                        handleNameChange={handleNameChange}
+                        handleClanToggle={handleClanToggle}
+                        handleDotHover={handleDotHover}
+                        handleDotHoverLeave={handleDotHoverLeave}
+                      />
+                    );
+                  })}
+                </div>
               ))}
             </div>
           </div>
