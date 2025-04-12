@@ -20,19 +20,19 @@
   
   .dot {
     display: inline-block;
-    width: 16px;
-    height: 16px;
+    width: 10px;   /* scaled down */
+    height: 10px;  /* scaled down */
     margin-left: 4px;
     border: 1px solid #000;
     border-radius: 50%;
+    box-shadow: 0 0 0 1px #fff; /* small white outline */
     cursor: pointer;
     text-align: center;
-    line-height: 16px;
+    line-height: 10px; /* match dot height */
     user-select: none;
-    font-size: 0.8rem;
-    transition: background-color 0.2s ease;
-    box-shadow: 0 0 0 1px #fff; 
+    font-size: 0.6rem; /* smaller if you have text or symbols inside */
   }
+  
   
   .dot:hover {
     filter: brightness(85%);

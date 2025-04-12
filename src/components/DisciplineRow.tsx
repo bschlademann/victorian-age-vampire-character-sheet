@@ -1,8 +1,8 @@
 // src/components/DisciplineRow.tsx
 
 import React from "react";
-import { disciplineHighlights, costMapping } from "../domain";
-import "../styles/DisciplineRow.css";
+import { disciplineHighlights, costMapping, allDisciplines } from "../domain";
+// import "../styles/DisciplineRow.css";
 
 interface DisciplineRowProps {
   index: number;
@@ -87,7 +87,7 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
         className="discipline-select"
       >
         <option value="">Select Discipline</option>
-        {/* You can map over allDisciplines from domain here if desired */}
+        {allDisciplines.map(discipline => (<option key={`discipline-${discipline}`}>{discipline}</option>))}
       </select>
 
       <label className="clan-checkbox">

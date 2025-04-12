@@ -3,7 +3,7 @@
 import React from "react";
 import { TraitRowProps } from "../types";
 import { maxLevels, costMapping, disciplineHighlights } from "../domain";
-import "../styles/TraitRow.css"; // Import your component-specific styles
+// import "../styles/TraitRow.css"; // Import your component-specific styles
 
 export const TraitRow: React.FC<TraitRowProps> = ({
   trait,
@@ -57,8 +57,10 @@ export const TraitRow: React.FC<TraitRowProps> = ({
   return (
     <div className={`trait-row${isHighlighted ? " highlight" : ""}`}>
       <span className="trait-name">{trait}</span>
-      {dots}
-      {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
+      <span className="dots-dontainer">{dots}</span>
+      <span className="cost-container">
+        {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
+      </span>
     </div>
   );
 };

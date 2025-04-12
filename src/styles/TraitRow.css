@@ -11,30 +11,8 @@
   }
   
   .trait-name {
-    width: 120px;
+    width: 70px;
   }
   
-  .dot {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-left: 4px;
-    border: 1px solid #000;
-    border-radius: 50%;
-    cursor: pointer;
-    text-align: center;
-    line-height: 16px;
-    user-select: none;
-    font-size: 0.8rem;
-    transition: background-color 0.2s ease;
-  }
-  
-  .dot:hover {
-    filter: brightness(85%);
-  }
-  
-  .dot-cost {
-    margin-left: 8px;
-    font-style: italic;
-  }
+
   

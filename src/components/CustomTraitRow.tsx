@@ -3,7 +3,7 @@
 import React from "react";
 import { CustomTraitRowProps } from "../types";
 import { maxLevels, costMapping, disciplineHighlights } from "../domain";
-import "../styles/CustomTraitRow.css";
+// import "../styles/CustomTraitRow.css";
 
 export const CustomTraitRow: React.FC<CustomTraitRowProps> = ({
   traitKey,
