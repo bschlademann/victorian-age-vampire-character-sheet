@@ -12,7 +12,6 @@ export const CustomTraitRow: React.FC<CustomTraitRowProps> = ({
   onChange,
   value,
   onNameChange,
-  isHighlighted,
   onDotHover,
   onDotHoverLeave,
 }) => {
@@ -56,15 +55,15 @@ export const CustomTraitRow: React.FC<CustomTraitRowProps> = ({
       : null;
 
   return (
-    <div className={`trait-row${isHighlighted ? " highlight" : ""}`}>
+    <div className="trait-row">
       <input
         type="text"
         className="custom-input"
-        placeholder="Custom name"
+        placeholder="Background"
         value={value}
         onChange={(e) => onNameChange(traitKey + "_name", e.target.value)}
       />
-      {dots}
+      <div className="dots-container">{dots}</div>
       {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
     </div>
   );

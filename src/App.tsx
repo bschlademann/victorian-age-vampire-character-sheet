@@ -246,8 +246,7 @@ const App: React.FC = () => {
                   isHighlighted={highlightedTraits.includes(item.name)}
                 />
               ))}
-              <h4>Custom Hintergründe</h4>
-              {Array.from({ length: 5 }, (_, i) => {
+              {Array.from({ length: 2 }, (_, i) => {
                 const key = `Hintergrund_custom_${i + 1}`;
                 return (
                   <CustomTraitRow

@@ -11,6 +11,10 @@
   gap: 1rem;
 }
 
+h2 {
+  text-align: center;
+}
+
 .row-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -33,6 +37,12 @@
 .cost-container {
   justify-self: end;
   margin-right: 1rem;
+}
+
+.column {
+  /* display: grid;
+  justify-content: center; */
+  /* z.B. "Körperlich" */
 }
 
 h3 {
