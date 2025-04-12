@@ -57,7 +57,7 @@ export const TraitRow: React.FC<TraitRowProps> = ({
   return (
     <div className={`trait-row${isHighlighted ? " highlight" : ""}`}>
       <span className="trait-name">{trait}</span>
-      <span className="dots-dontainer">{dots}</span>
+      <span className="dots-container">{dots}</span>
       <span className="cost-container">
         {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
       </span>

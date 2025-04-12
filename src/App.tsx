@@ -120,7 +120,7 @@ const App: React.FC = () => {
         <h1>Vampire: The Masquerade Character Sheet</h1>
         <div className="ep-display">EP: {ep}</div>
       </header>
-      <div>
+      <div className="section-row-container">
         {/* === ROW 1: Attributes (3 columns) === */}
         <section className="section-row">
           <h2>Attributes</h2>
@@ -178,22 +178,25 @@ const App: React.FC = () => {
           <div className="row-container">
             {/* Talente */}
             <div className="column">
-              <h3>Talente</h3>
-              {categories.fähigkeiten.talente.map((trait) => (
-                <TraitRow
-                  key={trait}
-                  trait={trait}
-                  currentLevel={traits[trait] as number}
-                  costCategory="talente"
-                  onChange={handleChange}
-                  isHighlighted={highlightedTraits.includes(trait)}
-                />
-              ))}
+                <h3>Talente</h3>
+              <div className="faehigkeiten-container">
+                {categories.fähigkeiten.talente.map((trait) => (
+                  <TraitRow
+                    key={trait}
+                    trait={trait}
+                    currentLevel={traits[trait] as number}
+                    costCategory="talente"
+                    onChange={handleChange}
+                    isHighlighted={highlightedTraits.includes(trait)}
+                  />
+                ))}
+              </div>
             </div>
 
             {/* Fertigkeiten */}
             <div className="column">
               <h3>Fertigkeiten</h3>
+              <div className="faehigkeiten-container">
               {categories.fähigkeiten.fähigkeiten.map((trait) => (
                 <TraitRow
                   key={trait}
@@ -205,10 +208,12 @@ const App: React.FC = () => {
                 />
               ))}
             </div>
+            </div>
 
             {/* Kenntnisse */}
             <div className="column">
               <h3>Kenntnisse</h3>
+              <div className="faehigkeiten-container">
               {categories.fähigkeiten.kenntnisse.map((trait) => (
                 <TraitRow
                   key={trait}
@@ -219,6 +224,7 @@ const App: React.FC = () => {
                   isHighlighted={highlightedTraits.includes(trait)}
                 />
               ))}
+            </div>
             </div>
           </div>
         </section>
