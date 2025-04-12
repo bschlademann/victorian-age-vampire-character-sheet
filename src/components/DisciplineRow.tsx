@@ -5,6 +5,7 @@ interface DisciplineRowProps {
   index: number;
   disciplineName: string;
   currentLevel: number;
+  isClan: boolean;
   ep: number;
   handleChange: (
     trait: string,
@@ -12,6 +13,7 @@ interface DisciplineRowProps {
     costCategory: string | null
   ) => void;
   handleNameChange: (key: string, newValue: string) => void;
+  handleClanToggle: (disciplineKey: string) => void;
   handleDotHover: (discipline: string, level: number) => void;
   handleDotHoverLeave: () => void;
 }
