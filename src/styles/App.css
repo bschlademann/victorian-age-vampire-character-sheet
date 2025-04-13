@@ -97,3 +97,9 @@ input, select {
 
   border: 1px solid #999;
 }
+
+.discipline-select {
+  min-width: 100px;
+  max-width: 120px;
+  margin-right: 0.5rem;
+}

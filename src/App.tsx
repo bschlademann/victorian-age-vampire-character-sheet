@@ -9,12 +9,14 @@ import {
   prefill,
   disciplineHighlights,
   costMapping,
+  clanDisciplines,
 } from "./domain";
 
 import { TraitRow } from "./components/TraitRow";
 import { CustomTraitRow } from "./components/CustomTraitRow";
 import { DisciplineRow } from "./components/DisciplineRow";
 import { calculateCost } from "./utils";
+import { ClanSelector } from "./components/ClanSelector";
 
 const App: React.FC = () => {
   const initialTraits: { [key: string]: number | string | boolean } = {};
@@ -112,6 +114,21 @@ const App: React.FC = () => {
 
   function handleDotHoverLeave() {
     setHighlightedTraits([]);
+  }
+
+  function handleClanSelect(clan: string) {
+    const clanDisciplineList = clanDisciplines[clan];
+    if (!clanDisciplineList) return;
+
+    const newTraits = { ...traits };
+    
+    // Update first three disciplines with clan disciplines
+    for (let i = 0; i < 3; i++) {
+      newTraits[`Discipline_${i}_name`] = clanDisciplineList[i];
+      newTraits[`Discipline_${i}_isClan`] = true;
+    }
+    
+    setTraits(newTraits);
   }
 
   return (
@@ -267,30 +284,65 @@ const App: React.FC = () => {
             <div className="column">
               <h3>Disziplinen</h3>
               <div className="disciplines-container">
-                {Array.from({ length: 3 }).map((_, rowIndex) => (
-                  <div className="disciplines-row" key={rowIndex}>
-                    {Array.from({ length: 2 }).map((_, colIndex) => {
-                      const i = rowIndex * 2 + colIndex;
-                      return (
-                        <DisciplineRow
-                          key={`Discipline_${i}`}
-                          index={i}
-                          disciplineName={
-                            traits[`Discipline_${i}_name`] as string
+                <ClanSelector onClanSelect={handleClanSelect} />
+                {/* First three disciplines (clan disciplines) */}
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div className="trait-row" key={`Discipline_${i}`}>
+                    <input
+                      type="text"
+                      value={traits[`Discipline_${i}_name`] as string}
+                      readOnly
+                      placeholder="select a clan"
+                      className="discipline-select"
+                    />
+                    <div className="dots-container">
+                      {Array.from({ length: 5 }).map((_, dotIndex) => (
+                        <span
+                          key={dotIndex}
+                          className={`dot ${
+                            dotIndex < (traits[`Discipline_${i}`] as number)
+                              ? "filled"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            handleChange(
+                              `Discipline_${i}`,
+                              dotIndex + 1,
+                              "disziplinenClan"
+                            )
                           }
-                          currentLevel={traits[`Discipline_${i}`] as number}
-                          isClan={traits[`Discipline_${i}_isClan`] as boolean}
-                          ep={ep}
-                          handleChange={handleChange}
-                          handleNameChange={handleNameChange}
-                          handleClanToggle={handleClanToggle}
-                          handleDotHover={handleDotHover}
-                          handleDotHoverLeave={handleDotHoverLeave}
+                          onMouseEnter={() =>
+                            handleDotHover(
+                              traits[`Discipline_${i}_name`] as string,
+                              dotIndex + 1
+                            )
+                          }
+                          onMouseLeave={handleDotHoverLeave}
                         />
-                      );
-                    })}
+                      ))}
+                    </div>
                   </div>
                 ))}
+
+                {/* Last three disciplines (custom disciplines) */}
+                {Array.from({ length: 3 }).map((_, i) => {
+                  const index = i + 3;
+                  return (
+                    <DisciplineRow
+                      key={`Discipline_${index}`}
+                      index={index}
+                      disciplineName={traits[`Discipline_${index}_name`] as string}
+                      currentLevel={traits[`Discipline_${index}`] as number}
+                      isClan={traits[`Discipline_${index}_isClan`] as boolean}
+                      ep={ep}
+                      handleChange={handleChange}
+                      handleNameChange={handleNameChange}
+                      handleClanToggle={handleClanToggle}
+                      handleDotHover={handleDotHover}
+                      handleDotHoverLeave={handleDotHoverLeave}
+                    />
+                  );
+                })}
               </div>
             </div>
 
