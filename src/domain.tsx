@@ -107,6 +107,7 @@ export const prefill: { [key: string]: number } = {
   erscheinung: 1,
   wahrnehmung: 1,
   intelligenz: 1,
+  geistesschärfe: 1,
   alertness: 1,
   brawl: 1,
   dodge: 2,

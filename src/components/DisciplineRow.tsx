@@ -1,5 +1,5 @@
 import React from "react";
-import { costMapping, allDisciplines } from "../domain";
+import { costMapping, allDisciplines, prefill } from "../domain";
 
 interface DisciplineRowProps {
   index: number;
@@ -32,6 +32,7 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
 }) => {
   const costCategory = isClan ? "disziplinenClan" : "disziplinNonClan";
   const nextCost = currentLevel < 5 ? costMapping[costCategory][currentLevel + 1] : null;
+  const prefilledLevel = prefill[disciplineName] || 0;
 
   return (
     <div className="disciplines-row">
@@ -59,25 +60,39 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
           </select>
         )}
         <div className="dots-container">
-          {Array.from({ length: 5 }).map((_, dotIndex) => (
-            <span
-              key={dotIndex}
-              className="dot"
-              style={{
-                backgroundColor: dotIndex < currentLevel ? "#000" : "#fff",
-                color: dotIndex < currentLevel ? "#fff" : "#000",
-              }}
-              onClick={() => {
-                if (currentLevel === 1 && dotIndex === 0) {
-                  handleChange(`Discipline_${index}`, 0, costCategory);
-                } else {
-                  handleChange(`Discipline_${index}`, dotIndex + 1, costCategory);
-                }
-              }}
-              onMouseEnter={() => handleDotHover(disciplineName, dotIndex + 1)}
-              onMouseLeave={handleDotHoverLeave}
-            />
-          ))}
+          {Array.from({ length: 5 }).map((_, dotIndex) => {
+            const isPrefilled = dotIndex < prefilledLevel;
+            const isFilled = dotIndex < currentLevel;
+            const isFirstNonPrefilled = dotIndex === prefilledLevel;
+            return (
+              <span
+                key={dotIndex}
+                className={`dot ${isPrefilled ? "prefilled" : ""}`}
+                style={{
+                  backgroundColor: isFilled ? (isPrefilled ? "#808080" : "#000") : "#fff",
+                  color: isFilled ? "#fff" : "#000",
+                  cursor: isPrefilled ? "not-allowed" : "pointer",
+                }}
+                onClick={() => {
+                  if (isPrefilled) return; // Don't allow changing prefilled dots
+                  if (isFirstNonPrefilled && isFilled) {
+                    // If this is the first non-prefilled dot and it's filled
+                    if (currentLevel > prefilledLevel + 1) {
+                      // If there are other dots selected, just deselect them
+                      handleChange(`Discipline_${index}`, prefilledLevel + 1, costCategory);
+                    } else {
+                      // If this is the only selected dot, deselect it completely
+                      handleChange(`Discipline_${index}`, prefilledLevel, costCategory);
+                    }
+                  } else {
+                    handleChange(`Discipline_${index}`, dotIndex + 1, costCategory);
+                  }
+                }}
+                onMouseEnter={() => handleDotHover(disciplineName, dotIndex + 1)}
+                onMouseLeave={handleDotHoverLeave}
+              />
+            );
+          })}
         </div>
         {nextCost !== null && <span className="dot-cost">({nextCost})</span>}
       </div>

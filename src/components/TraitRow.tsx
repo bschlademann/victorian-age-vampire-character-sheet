@@ -2,7 +2,7 @@
 
 import React from "react";
 import { TraitRowProps } from "../types";
-import { maxLevels, costMapping, disciplineHighlights } from "../domain";
+import { maxLevels, costMapping, disciplineHighlights, prefill } from "../domain";
 // import "../styles/TraitRow.css"; // Import your component-specific styles
 
 export const TraitRow: React.FC<TraitRowProps> = ({
@@ -15,6 +15,7 @@ export const TraitRow: React.FC<TraitRowProps> = ({
   onDotHoverLeave,
 }) => {
   const computedMax = costCategory ? maxLevels[costCategory] : 5;
+  const prefilledLevel = prefill[trait] || 0;
 
   const isDiscipline = Object.prototype.hasOwnProperty.call(
     disciplineHighlights,
@@ -23,14 +24,24 @@ export const TraitRow: React.FC<TraitRowProps> = ({
 
   const dots = [];
   for (let i = 1; i <= computedMax; i++) {
-    const filled = i <= currentLevel;
+    const isPrefilled = i <= prefilledLevel;
+    const isFilled = i <= currentLevel;
+    const isFirstNonPrefilled = i === prefilledLevel + 1;
     dots.push(
       <span
         key={i}
-        className="dot"
+        className={`dot ${isPrefilled ? "prefilled" : ""}`}
         onClick={() => {
-          if (currentLevel === 1 && i === 1 && filled) {
-            onChange(trait, 0, costCategory);
+          if (isPrefilled) return; // Don't allow changing prefilled dots
+          if (isFirstNonPrefilled && isFilled) {
+            // If this is the first non-prefilled dot and it's filled
+            if (currentLevel > prefilledLevel + 1) {
+              // If there are other dots selected, just deselect them
+              onChange(trait, prefilledLevel + 1, costCategory);
+            } else {
+              // If this is the only selected dot, deselect it completely
+              onChange(trait, prefilledLevel, costCategory);
+            }
           } else {
             onChange(trait, i, costCategory);
           }
@@ -42,8 +53,9 @@ export const TraitRow: React.FC<TraitRowProps> = ({
           isDiscipline && onDotHoverLeave ? onDotHoverLeave : undefined
         }
         style={{
-          backgroundColor: filled ? "#000" : "#fff",
-          color: filled ? "#fff" : "#000",
+          backgroundColor: isFilled ? (isPrefilled ? "#808080" : "#000") : "#fff",
+          color: isFilled ? "#fff" : "#000",
+          cursor: isPrefilled ? "not-allowed" : "pointer",
         }}
       />
     );
