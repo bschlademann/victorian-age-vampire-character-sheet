@@ -115,12 +115,14 @@ export const prefill: { [key: string]: number } = {
   melee: 1,
   ride: 1,
   linguistics: 3,
-  ally: 1,
-  generation: 5,
-  status: 1,
-  gewissen: 1,
-  selbstbeherrschung: 1,
-  mut: 1,
+  Ally: 1,
+  Generation: 5,
+  Status: 1,
+  Gewissen: 1,
+  Selbstbeherrschung: 1,
+  Mut: 1,
+  Menschlichkeit: 1,
+  Willenskraft: 1,
 };
 
 // For cost lookups
