@@ -1,5 +1,5 @@
 import React from "react";
-import { disciplineHighlights, costMapping, allDisciplines } from "../domain";
+import { costMapping, allDisciplines } from "../domain";
 
 interface DisciplineRowProps {
   index: number;
@@ -24,10 +24,8 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
   disciplineName,
   currentLevel,
   isClan,
-  ep,
   handleChange,
   handleNameChange,
-  handleClanToggle,
   handleDotHover,
   handleDotHoverLeave,
   isReadOnly = false,
