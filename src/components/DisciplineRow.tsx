@@ -12,83 +12,77 @@ interface DisciplineRowProps {
     newLevel: number,
     costCategory: string | null
   ) => void;
-  handleNameChange: (key: string, newValue: string) => void;
-  handleClanToggle: (disciplineKey: string) => void;
+  handleNameChange?: (key: string, newValue: string) => void;
+  handleClanToggle?: (disciplineKey: string) => void;
   handleDotHover: (discipline: string, level: number) => void;
   handleDotHoverLeave: () => void;
+  isReadOnly?: boolean;
 }
 
 export const DisciplineRow: React.FC<DisciplineRowProps> = ({
   index,
   disciplineName,
   currentLevel,
+  isClan,
+  ep,
   handleChange,
   handleNameChange,
+  handleClanToggle,
   handleDotHover,
   handleDotHoverLeave,
+  isReadOnly = false,
 }) => {
-  const costCategory = index < 3 ? "disziplinenClan" : "disziplinNonClan";
-  const disciplineSelected = Boolean(disciplineName);
-
-  const dots = [];
-  for (let i = 1; i <= 5; i++) {
-    const filled = i <= currentLevel;
-    dots.push(
-      <span
-        key={i}
-        className={`dot${disciplineSelected ? "" : " disabled-dot"}`}
-        onClick={
-          disciplineSelected
-            ? () => {
-                if (currentLevel === 1 && i === 1 && filled) {
-                  handleChange(`Discipline_${index}`, 0, costCategory);
-                } else {
-                  handleChange(`Discipline_${index}`, i, costCategory);
-                }
-              }
-            : undefined
-        }
-        onMouseEnter={
-          disciplineSelected && disciplineHighlights[disciplineName]
-            ? () => handleDotHover(disciplineName, i)
-            : undefined
-        }
-        onMouseLeave={
-          disciplineSelected && disciplineHighlights[disciplineName]
-            ? handleDotHoverLeave
-            : undefined
-        }
-        style={{
-          backgroundColor: filled ? "#000" : "#fff",
-          color: filled ? "#fff" : "#000",
-          cursor: disciplineSelected ? "pointer" : "not-allowed",
-        }}
-      />
-    );
-  }
-
-  const nextCost =
-    disciplineSelected && currentLevel < 5
-      ? costMapping[costCategory][currentLevel + 1]
-      : null;
+  const costCategory = isClan ? "disziplinenClan" : "disziplinNonClan";
+  const nextCost = currentLevel < 5 ? costMapping[costCategory][currentLevel + 1] : null;
 
   return (
-    <div className="trait-row">
-      <select
-        value={disciplineName}
-        onChange={(e) =>
-          handleNameChange(`Discipline_${index}_name`, e.target.value)
-        }
-        className="discipline-select"
-        
-      >
-        <option value="">-</option>
-        {allDisciplines.map((discipline) => (
-          <option key={`discipline-${discipline}`}>{discipline}</option>
-        ))}
-      </select>
-      <div className="dots-container">{dots}</div>
-      {nextCost !== null && <span className="dot-cost"> ({nextCost})</span>}
+    <div className="disciplines-row">
+      <div className="trait-row">
+        {isReadOnly ? (
+          <input
+            type="text"
+            value={disciplineName}
+            readOnly
+            placeholder="select a clan"
+            className="discipline-select"
+          />
+        ) : (
+          <select
+            value={disciplineName}
+            onChange={(e) => handleNameChange?.(`Discipline_${index}_name`, e.target.value)}
+            className="discipline-select"
+          >
+            <option value="">-</option>
+            {allDisciplines.map((discipline) => (
+              <option key={discipline} value={discipline}>
+                {discipline}
+              </option>
+            ))}
+          </select>
+        )}
+        <div className="dots-container">
+          {Array.from({ length: 5 }).map((_, dotIndex) => (
+            <span
+              key={dotIndex}
+              className="dot"
+              style={{
+                backgroundColor: dotIndex < currentLevel ? "#000" : "#fff",
+                color: dotIndex < currentLevel ? "#fff" : "#000",
+              }}
+              onClick={() => {
+                if (currentLevel === 1 && dotIndex === 0) {
+                  handleChange(`Discipline_${index}`, 0, costCategory);
+                } else {
+                  handleChange(`Discipline_${index}`, dotIndex + 1, costCategory);
+                }
+              }}
+              onMouseEnter={() => handleDotHover(disciplineName, dotIndex + 1)}
+              onMouseLeave={handleDotHoverLeave}
+            />
+          ))}
+        </div>
+        {nextCost !== null && <span className="dot-cost">({nextCost})</span>}
+      </div>
     </div>
   );
 };
