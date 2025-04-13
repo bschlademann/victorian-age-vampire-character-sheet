@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./styles/App.css";
 
 import {
@@ -59,6 +59,7 @@ const App: React.FC = () => {
   }>(initialTraits);
   const [ep, setEP] = useState<number>(350);
   const [highlightedTraits, setHighlightedTraits] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleChange(
     trait: string,
@@ -131,11 +132,61 @@ const App: React.FC = () => {
     setTraits(newTraits);
   }
 
+  const handleSave = () => {
+    const characterData = {
+      traits,
+      ep,
+      highlightedTraits,
+    };
+    const jsonString = JSON.stringify(characterData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'character-sheet.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleLoad = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target?.result as string);
+          setTraits(data.traits);
+          setEP(data.ep || 0);
+          setHighlightedTraits(data.highlightedTraits || []);
+        } catch (error) {
+          console.error('Error loading character sheet:', error);
+          alert('Error loading character sheet. Please make sure the file is valid.');
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
   return (
     <div className="sheet-container">
       <header>
         <h1>Vampire: The Masquerade Character Sheet</h1>
-        <div className="ep-display">EP: {ep}</div>
+        <div className="header-controls">
+          <div className="ep-display">EP: {ep}</div>
+          <div className="save-load-buttons">
+            <button onClick={handleSave}>Save Character</button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleLoad}
+              accept=".json"
+              style={{ display: 'none' }}
+            />
+            <button onClick={() => fileInputRef.current?.click()}>Load Character</button>
+          </div>
+        </div>
       </header>
       <div className="section-row-container">
         {/* === ROW 1: Attributes (3 columns) === */}
