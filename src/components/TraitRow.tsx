@@ -53,7 +53,7 @@ export const TraitRow: React.FC<TraitRowProps> = ({
           isDiscipline && onDotHoverLeave ? onDotHoverLeave : undefined
         }
         style={{
-          backgroundColor: isFilled ? (isPrefilled ? "#808080" : "#000") : "#fff",
+          backgroundColor: isFilled ? (isPrefilled ? "#666666" : "#000") : "#fff",
           color: isFilled ? "#fff" : "#000",
           cursor: isPrefilled ? "not-allowed" : "pointer",
         }}
