@@ -69,7 +69,7 @@ export const DisciplineRow: React.FC<DisciplineRowProps> = ({
                 key={dotIndex}
                 className={`dot ${isPrefilled ? "prefilled" : ""}`}
                 style={{
-                  backgroundColor: isFilled ? (isPrefilled ? "#808080" : "#000") : "#fff",
+                  backgroundColor: isFilled ? (isPrefilled ? "#666666" : "#000") : "#fff",
                   color: isFilled ? "#fff" : "#000",
                   cursor: isPrefilled ? "not-allowed" : "pointer",
                 }}
